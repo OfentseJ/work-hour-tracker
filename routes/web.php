@@ -6,26 +6,27 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmployeeAuthController;
 
+// Home/Landing Page
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Admin Login Routes
-Route::get('/admin/login', [AuthController::class, 'showLoginForm'])->name('admin.login');
-Route::post('/admin/login', [AuthController::class, 'login']);
-Route::post('/admin/logout', [AuthController::class, 'logout'])->name('admin.logout');
-
-// Employee Login Routes
-Route::get('/employee/login', [EmployeeAuthController::class, 'showLoginForm'])->name('employee.login');
-Route::post('/employee/login', [EmployeeAuthController::class, 'login']);
-Route::post('/employee/logout', [EmployeeAuthController::class, 'logout'])->name('employee.logout');
-
-// Default login redirect
+// Login Selection Page
 Route::get('/login', function() {
     return view('auth.login-select');
 })->name('login');
 
-// Admin Routes
+// Admin Authentication Routes
+Route::get('/admin/login', [AuthController::class, 'showLoginForm'])->name('admin.login');
+Route::post('/admin/login', [AuthController::class, 'login'])->name('admin.login.submit');
+Route::post('/admin/logout', [AuthController::class, 'logout'])->name('admin.logout');
+
+// Employee Authentication Routes
+Route::get('/employee/login', [EmployeeAuthController::class, 'showLoginForm'])->name('employee.login');
+Route::post('/employee/login', [EmployeeAuthController::class, 'login'])->name('employee.login.submit');
+Route::post('/employee/logout', [EmployeeAuthController::class, 'logout'])->name('employee.logout');
+
+// Admin Protected Routes
 Route::middleware(['auth:admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/employees', [AdminController::class, 'employees'])->name('admin.employees');
@@ -37,7 +38,7 @@ Route::middleware(['auth:admin'])->prefix('admin')->group(function () {
     Route::get('/weekly-report', [AdminController::class, 'weeklyReport'])->name('admin.weekly-report');
 });
 
-// Employee Routes
+// Employee Protected Routes
 Route::middleware(['auth:employee'])->prefix('employee')->group(function () {
     Route::get('/dashboard', [EmployeeController::class, 'dashboard'])->name('employee.dashboard');
     Route::post('/check-in', [EmployeeController::class, 'checkIn'])->name('employee.checkin');

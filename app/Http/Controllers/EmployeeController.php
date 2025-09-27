@@ -100,7 +100,12 @@ class EmployeeController extends Controller
             ->orderBy('date', 'desc')
             ->paginate(15);
 
-        return view('employee.attendance', compact('attendances', 'employee'));
+        // Add today's attendance for the summary cards
+        $todayAttendance = Attendance::where('employee_id', $employee->id)
+            ->whereDate('date', today())
+            ->first();
+
+        return view('employee.attendance', compact('attendances', 'employee', 'todayAttendance'));
     }
 
     public function profile()

@@ -60,7 +60,7 @@
                         <i class="fas fa-chart-bar me-2"></i> Weekly Report
                     </a>
                     <hr class="my-3 border-light">
-                    <form method="POST" action="{{ route('logout') }}">
+                    <form method="POST" action="{{ route('admin.logout') }}">
                         @csrf
                         <button type="submit" class="nav-link border-0 bg-transparent">
                             <i class="fas fa-sign-out-alt me-2"></i> Logout
